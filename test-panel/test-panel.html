@@ -105,15 +105,16 @@
     <fieldset>
       <legend>Müşteri (Customers)</legend>
       <form id="customerForm">
-        <input type="hidden" name="id" id="customerId">
-        <label>Ad:</label><input required name="name" id="customerName"><br>
-        <label>Email:</label><input name="email" id="customerEmail"><br>
-        <label>Adres:</label><input name="address" id="customerAddress"><br>
-        <label>Doğum Tarihi:</label><input name="birthdate" type="date" id="customerBirthdate"><br>
-        <label>TC No:</label><input name="tc_no" id="customerTC"><br>
-        <button type="submit" id="customerSaveBtn">Ekle</button>
-        <button type="button" id="customerCancelBtn" class="hidden">İptal</button>
-      </form>
+  <input type="hidden" name="id" id="customerId">
+  <label>Ad:</label><input required name="name" id="customerName"><br>
+  <label>Soyad:</label><input required name="surname" id="customerSurname"><br>
+  <label>Email:</label><input name="email" id="customerEmail"><br>
+  <label>Adres:</label><input name="address" id="customerAddress"><br>
+  <label>Doğum Tarihi:</label><input name="birthdate" type="date" id="customerBirthdate"><br>
+  <label>TC No:</label><input name="tc_no" id="customerTC"><br>
+  <button type="submit" id="customerSaveBtn">Ekle</button>
+  <button type="button" id="customerCancelBtn" class="hidden">İptal</button>
+</form>
       <button type="button" id="customersListBtn">Listele</button>
       <div id="customersResult" class="result"></div>
     </fieldset>

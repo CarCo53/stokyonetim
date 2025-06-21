@@ -365,12 +365,13 @@ async function listCustomers() {
   const el = document.getElementById('customersResult');
   if (Array.isArray(customers)) {
     let html = `<table><tr>
-      <th>ID</th><th>Ad</th><th>Email</th><th>Adres</th><th>Doğum Tarihi</th><th>TC No</th><th>Düzenle</th><th>Sil</th>
+      <th>ID</th><th>Ad</th><th>Soyad</th><th>Email</th><th>Adres</th><th>Doğum Tarihi</th><th>TC No</th><th>Düzenle</th><th>Sil</th>
     </tr>`;
     customers.forEach(c => {
       html += `<tr>
         <td>${c.id}</td>
         <td>${c.name}</td>
+        <td>${c.surname}</td>
         <td>${c.email || ''}</td>
         <td>${c.address || ''}</td>
         <td>${c.birthdate || ''}</td>
@@ -402,6 +403,7 @@ function startEditCustomer(id) {
   editingCustomerId = customer.id;
   document.getElementById('customerId').value = customer.id || '';
   document.getElementById('customerName').value = customer.name || '';
+  document.getElementById('customerSurname').value = customer.surname || '';
   document.getElementById('customerEmail').value = customer.email || '';
   document.getElementById('customerAddress').value = customer.address || '';
   document.getElementById('customerBirthdate').value = customer.birthdate || '';
