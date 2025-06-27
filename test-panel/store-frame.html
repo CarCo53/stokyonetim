@@ -2,33 +2,211 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Mağaza Frame</title>
+  <title>Mağaza İşlemleri</title>
   <style>
-    body { font-family: monospace; margin: 18px; }
-    .result { background: #fff; border: 1px solid #bbb; padding: 8px; margin-top: 8px; }
-    label { display: inline-block; width: 100px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 6px;}
-    th, td { border: 1px solid #ccc; padding: 3px 6px; }
-    th { background: #eee; }
-    button { cursor: pointer; }
-    select:invalid { color: #aaa; }
+    body { font-family: monospace; }
+    .input-row { margin-bottom: 8px; }
+    label { min-width: 80px; display: inline-block; }
+    input[type="text"], select { width: 180px; }
+    button { margin-right: 5px; }
+    #result { margin-top: 10px; font-size: 13px; background: #eee; padding: 4px; border-radius: 4px; }
+    table { margin-top: 10px; width: 100%; border-collapse: collapse;}
+    th, td { border: 1px solid #aaa; padding: 4px 8px; }
+    th { background: #f0f0f0; }
   </style>
 </head>
 <body>
-  <h3>Mağaza İşlemleri</h3>
-  <form id="storeForm">
-    <input type="hidden" name="id" id="storeId">
-    <label>Adı:</label><input required name="name" id="storeName"><br>
-    <label>Adres:</label><input name="address" id="storeAddress"><br>
-    <label>Firma:</label>
-    <select required name="firm_id" id="storeFirmId">
-      <option value="" disabled selected>Firma seçiniz</option>
-    </select><br>
-    <button type="submit" id="storeSaveBtn">Ekle</button>
-    <button type="button" id="storeCancelBtn" class="hidden">İptal</button>
+  <h2>Mağaza İşlemleri</h2>
+  <form id="storeForm" autocomplete="off">
+    <div class="input-row">
+      <label for="name">Adı:</label>
+      <input type="text" id="name" name="name">
+    </div>
+    <div class="input-row">
+      <label for="firm_id">Firma:</label>
+      <select id="firm_id" name="firm_id"></select>
+    </div>
+    <div class="input-row">
+      <button type="submit" id="btnAdd">Ekle</button>
+      <button type="button" id="btnUpdate" style="display:none;">Güncelle</button>
+      <button type="button" id="btnCancel" style="display:none;">İptal</button>
+      <button type="button" id="btnList">Listele</button>
+    </div>
   </form>
-  <button type="button" id="storesListBtn">Listele</button>
-  <div id="storesResult" class="result"></div>
-  <script src="store-frame.js"></script>
+  <div id="result"></div>
+  <div>
+    <table id="storesTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Adı</th>
+          <th>Firma</th>
+          <th>İşlemler</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <script>
+    console.log('Mağaza JS yüklendi!');
+    const apiBase = '/api/stores';
+    const apiFirms = '/api/firms';
+    let editingId = null;
+
+    async function fetchFirms() {
+      try {
+        const res = await fetch(apiFirms);
+        if (!res.ok) throw new Error('Firma API hatası: ' + res.status);
+        const firms = await res.json();
+        const sel = document.getElementById('firm_id');
+        sel.innerHTML = '';
+        for (const f of firms) {
+          const opt = document.createElement('option');
+          opt.value = f.id;
+          opt.textContent = f.name;
+          sel.appendChild(opt);
+        }
+      } catch (err) {
+        showResult('Firmalar yüklenemedi: ' + err.message);
+        console.error(err);
+      }
+    }
+
+    async function listStores() {
+      console.log('listStores çağrıldı');
+      try {
+        const res = await fetch(apiBase);
+        if (!res.ok) throw new Error('Mağaza API hatası: ' + res.status);
+        const stores = await res.json();
+        const table = document.getElementById('storesTable');
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
+        if (stores.length) {
+          table.style.display = '';
+          for (const s of stores) {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${s.id}</td>
+              <td>${s.name}</td>
+              <td>${s.firm_name || s.firm_id}</td>
+              <td>
+                <button onclick="editStore(${s.id}, '${s.name}', ${s.firm_id})">Düzenle</button>
+                <button onclick="deleteStore(${s.id})">Sil</button>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          }
+        } else {
+          table.style.display = 'none';
+        }
+      } catch (err) {
+        showResult('Mağazalar yüklenemedi: ' + err.message);
+        console.error(err);
+      }
+    }
+
+    window.editStore = function(id, name, firm_id) {
+      document.getElementById('name').value = name;
+      document.getElementById('firm_id').value = firm_id;
+      editingId = id;
+      document.getElementById('btnAdd').style.display = 'none';
+      document.getElementById('btnUpdate').style.display = '';
+      document.getElementById('btnCancel').style.display = '';
+    }
+
+    window.deleteStore = async function(id) {
+      if (!confirm('Bu mağazayı silmek istiyor musunuz?')) return;
+      try {
+        const res = await fetch(`${apiBase}/${id}`, { method: 'DELETE' });
+        const json = await res.json();
+        if (json.success) {
+          showResult('Silindi.');
+          listStores();
+        } else {
+          showResult('Hata: ' + (json.error || JSON.stringify(json)));
+        }
+      } catch (err) {
+        showResult('Silme hatası: ' + err.message);
+        console.error(err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOMContentLoaded!');
+      document.getElementById('storeForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const firm_id = document.getElementById('firm_id').value;
+        if (!name || !firm_id) {
+          showResult('Tüm alanlar zorunlu.');
+          return;
+        }
+        try {
+          if (editingId) {
+            // Update
+            const res = await fetch(`${apiBase}/${editingId}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, firm_id })
+            });
+            const json = await res.json();
+            if (json.id) {
+              showResult('Güncellendi.');
+              resetForm();
+              listStores();
+            } else {
+              showResult('Hata: ' + (json.error || JSON.stringify(json)));
+            }
+          } else {
+            // Create
+            const res = await fetch(apiBase, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, firm_id })
+            });
+            const json = await res.json();
+            if (json.id) {
+              showResult('Eklendi.');
+              resetForm();
+              listStores();
+            } else {
+              showResult('Hata: ' + (json.error || JSON.stringify(json)));
+            }
+          }
+        } catch (err) {
+          showResult('Kayıt hatası: ' + err.message);
+          console.error(err);
+        }
+      });
+
+      document.getElementById('btnUpdate').addEventListener('click', function() {
+        document.getElementById('storeForm').dispatchEvent(new Event('submit'));
+      });
+
+      document.getElementById('btnCancel').addEventListener('click', function() {
+        resetForm();
+      });
+
+      document.getElementById('btnList').addEventListener('click', function() {
+        listStores();
+      });
+
+      fetchFirms();
+      listStores();
+    });
+
+    function resetForm() {
+      document.getElementById('name').value = '';
+      document.getElementById('firm_id').selectedIndex = 0;
+      editingId = null;
+      document.getElementById('btnAdd').style.display = '';
+      document.getElementById('btnUpdate').style.display = 'none';
+      document.getElementById('btnCancel').style.display = 'none';
+    }
+
+    function showResult(msg) {
+      document.getElementById('result').textContent = msg;
+    }
+  </script>
 </body>
 </html>

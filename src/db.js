@@ -1,30 +1,19 @@
 const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
-const path = require('path');
+const { open } = require('sqlite');
 
-const dbFile = path.join(__dirname, '..', 'database.sqlite');
-const migrationFile = path.join(__dirname, 'migrations/001_init.sql');
-const seedFile = path.join(__dirname, 'migrations/seed.sql');
-
-function runSqlFile(db, filePath) {
-    const sql = fs.readFileSync(filePath, 'utf8');
-    db.exec(sql, err => {
-        if (err) {
-            console.error(`Hata: ${filePath} uygulanamadı!`, err);
-        } else {
-            console.log(`${filePath} başarıyla uygulandı.`);
-        }
-        db.close();
+let db;
+async function getDB() {
+  if (!db) {
+    db = await open({
+      filename: './database.sqlite',
+      driver: sqlite3.Database
     });
+  }
+  return db;
 }
 
-const cmd = process.argv[2];
-if (cmd === 'migrate') {
-    const db = new sqlite3.Database(dbFile);
-    runSqlFile(db, migrationFile);
-} else if (cmd === 'seed') {
-    const db = new sqlite3.Database(dbFile);
-    runSqlFile(db, seedFile);
-} else {
-    console.log('Kullanım: node src/db.js migrate|seed');
-}
+module.exports = {
+  get: async (...args) => (await getDB()).get(...args),
+  all: async (...args) => (await getDB()).all(...args),
+  run: async (...args) => (await getDB()).run(...args)
+};
