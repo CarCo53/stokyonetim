@@ -1,0 +1,41 @@
+Birden fazla mağazanın (telefoncu dükkânı gibi) işlemlerini ve stoklarını yönetebileceğim, modern, güvenli ve genişletilebilir bir stok takip sistemi için backend kodları oluşturmanı istiyorum. Şu detaylara özellikle dikkat et:
+
+1. **Çoklu Mağaza Desteği:**  
+   - Sistemde birden fazla mağaza olacak (ör: 50 farklı telefoncu dükkânı).
+   - Her mağazanın ürün, müşteri, satış ve personel listesi sadece kendine ait olacak, diğer mağazalardan tamamen izole olacak.
+
+2. **Kullanıcı Rolleri ve Yetkileri:**  
+   - 3 rol olacak: admin, patron, çalışan.
+   - Sadece admin yeni mağaza ekleyebilir (POST /stores).
+   - Patron ve çalışan sadece kendi mağazasında işlem yapabilir.
+   - Her kullanıcı (patron/çalışan), bir mağazaya atanacak.
+   - Admin isterse yeni patron veya çalışan da ekleyebilmeli.
+
+3. **Ana Varlıklar ve İlişkiler:**  
+   - stores (mağazalar), users (kullanıcılar), products (ürünler), customers (müşteriler), sales (satışlar).
+   - Tüm bu tablolar mağaza ile ilişkili olacak (store_id foreign key).
+   - Her mağazanın ürünleri, müşterileri ve satışları sadece o mağazaya ait olacak.
+
+4. **Yedekleme ve Geri Yükleme:**  
+   - Her mağaza, kendi ürün/müşteri/satış verisini JSON (veya istenirse CSV) olarak ayrı ayrı yedekleyebilmeli ve geri yükleyebilmeli.
+   - Yedekleme ve geri yükleme işlemleri mağazalar arasında izole olacak.
+
+5. **JWT ile Güvenli Kimlik Doğrulama:**  
+   - Kullanıcı oturumu için login ile JWT token verilecek.
+   - Her endpointte yetki JWT ve kullanıcı rolü ile kontrol edilecek.
+   - Kullanıcıların ve mağazaların birbirine karışmaması için JWT içinden store_id alınacak.
+
+6. **Kritik Stok Uyarısı:**  
+   - Her mağaza, kendi stoklarında kritik seviyede (min_quantity altı) olan ürünlerini görebilecek.
+
+7. **Kodlarda Temizlik ve Açıklama:**  
+   - Kodlar Express.js, sqlite3, bcrypt, jsonwebtoken ile yazılsın.
+   - Dosya ve route yapısı modüler olsun (her varlık için ayrı route dosyası).
+   - Tüm kodlar, yeni başlayan birinin de kolayca takip edebileceği şekilde temiz ve açıklamalı olsun.
+
+8. **Ekstra:**  
+   - Gerektiğinde ilerleyen adımlarda hizmet servisi (services tablosu) gibi bölümler eklenebilsin.
+
+**Bana örnek veritabanı şeması, ana dosyalar, route dosyaları, JWT/middleware ve örnek kullanım dökümanı hazırla.  
+Kodları, dosya isimleriyle blok blok ayrı ayrı ver.  
+Her şeyi baştan eksiksiz, çoklu mağaza ve admin kontrollü şekilde kurmak istiyorum.**
