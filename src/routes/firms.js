@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// Firma ekleme
+// Firma ekleme (senin kodun, değişmedi)
 router.post('/', async (req, res) => {
   const { name } = req.body;
   if (!name) {
@@ -10,13 +10,11 @@ router.post('/', async (req, res) => {
   }
   try {
     await db.run("BEGIN");
-    // Firma ekle
     const result = await db.run(
       "INSERT INTO firms (name) VALUES (?)",
       [name]
     );
     const firmId = result.lastID;
-    // O firmaya otomatik mağaza ekle (ör: "Merkez Mağaza")
     await db.run(
       "INSERT INTO stores (name, firm_id) VALUES (?, ?)",
       [`${name} Merkez Mağaza`, firmId]
@@ -29,4 +27,13 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Firma listeleme (DÜZELTİLDİ)
+router.get('/', (req, res) => {
+  db.all("SELECT id, name FROM firms ORDER BY name ASC", (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: "Firmalar listelenemedi.", detail: err.message });
+    }
+    res.json(rows);
+  });
+});
 module.exports = router;
