@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Paneli (iframe modüler)</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    .frames { display: flex; flex-wrap: wrap; gap: 8px; }
+    .frame-block { margin-bottom:12px; }
+    iframe { border: 1px solid #aaa; min-width: 480px; min-height: 350px; flex: 1; background: #fff; }
+    .frame-title { font-size: 14px; margin: 8px 0 0 8px; }
+  </style>
+</head>
+<body>
+  <h1>Stok Yönetim Test Paneli</h1>
+  <div class="frames">
+    <div class="frame-block">
+      <div class="frame-title">Giriş (Login)</div>
+      <iframe src="login.html" name="loginFrame"></iframe>
+    </div>
+    <div class="frame-block">
+      <div class="frame-title">Kullanıcılar</div>
+      <iframe src="users.html" name="usersFrame"></iframe>
+    </div>
+    <div class="frame-block">
+      <div class="frame-title">Mağazalar</div>
+      <iframe src="stores.html" name="storesFrame"></iframe>
+    </div>
+    <div class="frame-block">
+      <div class="frame-title">Ürünler</div>
+      <iframe src="products.html" name="productsFrame"></iframe>
+    </div>
+    <div class="frame-block">
+      <div class="frame-title">Müşteriler</div>
+      <iframe src="customers.html" name="customersFrame"></iframe>
+    </div>
+    <div class="frame-block">
+      <div class="frame-title">Satışlar</div>
+      <iframe src="sales.html" name="salesFrame"></iframe>
+    </div>
+    <div class="frame-block">
+      <div class="frame-title">Kategoriler</div>
+      <iframe src="categories.html" name="categoriesFrame"></iframe>
+    </div>
+  </div>
+</body>
+</html>

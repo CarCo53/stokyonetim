@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mağaza Testleri</title>
+  <style>
+    body { font-family: sans-serif; padding: 10px; }
+    label { display:inline-block; width:100px; }
+    input, select { margin-bottom: 8px; }
+    .res { font-family: monospace; background: #f5f5f5; padding: 8px; margin-top: 10px;}
+  </style>
+</head>
+<body>
+  <h2>Mağaza API Testleri</h2>
+  <form id="addStoreForm">
+    <label>Ad:</label><input name="name" required><br>
+    <label>Adres:</label><input name="address"><br>
+    <label>Firma ID:</label><input name="firm_id" required><br>
+    <button type="submit">Mağaza Ekle</button>
+  </form>
+  <button onclick="getStores()">Mağazaları Listele</button>
+  <div class="res" id="result"></div>
+<script src="common.js"></script>
+<script>
+const api = '/api/stores';
+document.getElementById('addStoreForm').onsubmit = async function(e) {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(this).entries());
+  const res = await fetch(api, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify(data)
+  });
+  document.getElementById('result').textContent = await res.text();
+};
+async function getStores() {
+  const res = await fetch(api, { headers: authHeaders() });
+  document.getElementById('result').textContent = await res.text();
+}
+</script>
+</body>
+</html>
