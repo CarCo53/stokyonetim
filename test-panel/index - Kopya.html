@@ -5,8 +5,8 @@
   <title>Stok Yönetim Frame Paneli</title>
   <style>
     body { font-family: monospace; margin: 0; background: #f9f9f9; }
-    .frames { display: flex; flex-direction: column; gap: 8px; margin: 12px; }
-    iframe { border: 1px solid #bbb; min-width: 420px; min-height: 420px; background: #fff; width: 100%; }
+    .frames { display: flex; gap: 8px; margin: 12px; }
+    iframe { border: 1px solid #bbb; min-width: 420px; min-height: 420px; background: #fff; }
     .title { font-size: 20px; margin: 16px; }
   </style>
 </head>
@@ -21,17 +21,5 @@
     <iframe src="customer-frame.html" title="Müşteri"></iframe>
     <iframe src="sale-frame.html" title="Satış"></iframe>
   </div>
-  <script>
-    // Token'ı ana frame'in localStorage'ına yaz
-    window.addEventListener('message', function(e) {
-      if (e.data && e.data.type === 'setJwtToken' && e.data.token) {
-        localStorage.setItem('jwt_token', e.data.token);
-      }
-      // Giriş başarılı olduğunda tüm frame'leri yenile:
-      if (e.data && e.data.type === 'loginSuccess') {
-        document.querySelectorAll('iframe').forEach(f => f.contentWindow.location.reload());
-      }
-    });
-  </script>
 </body>
 </html>

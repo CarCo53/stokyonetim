@@ -20,7 +20,14 @@ document.getElementById('loginForm').onsubmit = async e => {
     const result = await r.json();
     handleResult('loginResult', result);
     if(result.token) {
-      localStorage.setItem('jwt_token', result.token);
+      // Token'ı ana pencereye gönder!
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'setJwtToken', token: result.token }, '*');
+        window.parent.postMessage({ type: 'loginSuccess' }, '*');
+      } else {
+        // Eğer iframe değilse (doğrudan açılmışsa)
+        localStorage.setItem('jwt_token', result.token);
+      }
       document.getElementById('loginStatus').textContent = "Giriş başarılı!";
     } else {
       document.getElementById('loginStatus').textContent = (result.error || result.message || "Giriş başarısız!");
