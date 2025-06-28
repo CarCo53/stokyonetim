@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
+const auth = require('../middlewares/auth'); // EKLE
+
 
 // Firma ekleme
-router.post('/', async (req, res) => {
+router.post('/',auth, async (req, res) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({ error: "Firma adı zorunludur." });
@@ -30,7 +32,7 @@ router.post('/', async (req, res) => {
 });
 
 // Firma listeleme
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const firms = await db.all("SELECT id, name FROM firms ORDER BY name ASC");
     res.json(firms);
@@ -40,7 +42,7 @@ router.get('/', async (req, res) => {
 });
 
 // Firma silme (Delete)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const result = await db.run("DELETE FROM firms WHERE id = ?", [req.params.id]);
     if (result.changes === 0) {
@@ -53,7 +55,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Firma güncelleme (Update)
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({ error: "Firma adı zorunludur." });

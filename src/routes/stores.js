@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-
+const auth = require('../middlewares/auth');
 // Mağaza ekleme (Create)
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const { name, firm_id } = req.body;
   if (!name || !firm_id) {
     return res.status(400).json({ error: "Mağaza adı ve firması zorunludur." });
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 });
 
 // Mağazaları listeleme (Read all)
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const stores = await db.all(`
       SELECT s.id, s.name, s.firm_id, f.name as firm_name
@@ -53,7 +53,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Mağaza güncelleme (Update)
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   const { name, firm_id } = req.body;
   if (!name || !firm_id) {
     return res.status(400).json({ error: "Mağaza adı ve firması zorunludur." });
@@ -73,7 +73,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Mağaza silme (Delete)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     const result = await db.run("DELETE FROM stores WHERE id = ?", [req.params.id]);
     if (result.changes === 0) {
