@@ -19,12 +19,11 @@ document.getElementById('loginForm').onsubmit = async e => {
     const result = await r.json();
     handleResult('loginResult', result);
     if(result.token) {
+      localStorage.setItem('jwt_token', result.token); // <-- ÖNEMLİ!
       // Token'ı ana pencereye gönder!
       if (window.parent !== window) {
         window.parent.postMessage({ type: 'setJwtToken', token: result.token }, '*');
         window.parent.postMessage({ type: 'loginSuccess' }, '*');
-      } else {
-        localStorage.setItem('jwt_token', result.token);
       }
       document.getElementById('loginStatus').textContent = "Giriş başarılı!";
     } else {

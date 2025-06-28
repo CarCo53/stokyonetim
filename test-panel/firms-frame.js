@@ -1,15 +1,4 @@
-// local-storage.js yüklenmiş olmalı!
-// Tüm işlevler: ekle, güncelle, sil, listele...
-function api() {
-  return localStorage.getItem('apiurl') || "http://localhost:3001";
-}
-function getHeaders() {
-  const h = { 'Content-Type': 'application/json' };
-  const token = localStorage.getItem('jwt_token');
-  if (token) h['Authorization'] = 'Bearer ' + token;
-  return h;
-}
-
+// local-storage.js dahil edilmiş olmalı!
 function showResult(msg) {
   document.getElementById('firmsResult').textContent = msg;
 }
@@ -41,7 +30,7 @@ async function listFirms() {
     }
     document.getElementById('firmsResult').innerHTML = html;
 
-    // Edit ve Delete butonları bağla
+    // Edit ve Delete butonlarını bağla
     document.querySelectorAll('.editBtn').forEach(btn => {
       btn.onclick = function() {
         document.getElementById('firmId').value = this.dataset.id;
