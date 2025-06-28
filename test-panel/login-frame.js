@@ -1,4 +1,3 @@
-// === Ortak Fonksiyonlar ===
 function api() { return localStorage.getItem('apiurl') || "http://localhost:3001"; }
 function getHeaders() { return { 'Content-Type': 'application/json' }; }
 function handleResult(id, data) {
@@ -25,7 +24,6 @@ document.getElementById('loginForm').onsubmit = async e => {
         window.parent.postMessage({ type: 'setJwtToken', token: result.token }, '*');
         window.parent.postMessage({ type: 'loginSuccess' }, '*');
       } else {
-        // Eğer iframe değilse (doğrudan açılmışsa)
         localStorage.setItem('jwt_token', result.token);
       }
       document.getElementById('loginStatus').textContent = "Giriş başarılı!";
