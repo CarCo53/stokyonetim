@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Stok Yönetim Frame Paneli (Frame ile Modüler)</title>
+  <title>Stok Yönetim Test Paneli (Frame ile Modüler)</title>
   <style>
     body { font-family: monospace; margin: 0; background: #f9f9f9; }
     .frames { display: flex; flex-direction: column; gap: 8px; margin: 12px; }
@@ -22,18 +22,17 @@
     <iframe src="sale-frame.html" title="Satış"></iframe>
   </div>
   <script>
-    // Token'ı ana frame'in localStorage'ına yaz
+    // Frame yenileme: src'yi tekrar atamak kesin çalışır.
     window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'setJwtToken' && e.data.token) {
-    localStorage.setItem('jwt_token', e.data.token);
-  }
-  if (e.data && e.data.type === 'loginSuccess') {
-    // Frame'leri yenilemek için src'yi tekrar ata
-    document.querySelectorAll('iframe').forEach(f => {
-      f.src = f.src;
+      if (e.data && e.data.type === 'setJwtToken' && e.data.token) {
+        localStorage.setItem('jwt_token', e.data.token);
+      }
+      if (e.data && e.data.type === 'loginSuccess') {
+        document.querySelectorAll('iframe').forEach(f => {
+          f.src = f.src;
+        });
+      }
     });
-  }
-});
   </script>
 </body>
 </html>

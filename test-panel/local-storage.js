@@ -1,4 +1,3 @@
-// Ortak fonksiyonlar ve header hazırlama
 function api() {
   return localStorage.getItem('apiurl') || "http://localhost:3001";
 }
