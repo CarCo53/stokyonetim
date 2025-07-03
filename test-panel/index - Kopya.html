@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Stok Yönetim Frame Paneli</title>
+  <style>
+    body { font-family: monospace; margin: 0; background: #f9f9f9; }
+    .frames { display: flex; gap: 8px; margin: 12px; }
+    iframe { border: 1px solid #bbb; min-width: 420px; min-height: 420px; background: #fff; }
+    .title { font-size: 20px; margin: 16px; }
+  </style>
+</head>
+<body>
+  <div class="title">Stok Yönetim Test Paneli (Frame ile Modüler)</div>
+  <div class="frames">
+    <iframe src="login-frame.html" title="Giriş"></iframe>
+    <iframe src="firms-frame.html" title="Firma"></iframe>
+    <iframe src="store-frame.html" title="Mağaza"></iframe>
+    <iframe src="user-frame.html" title="Kullanıcı"></iframe>
+    <iframe src="product-frame.html" title="Ürün"></iframe>
+    <iframe src="customer-frame.html" title="Müşteri"></iframe>
+    <iframe src="sale-frame.html" title="Satış"></iframe>
+  </div>
+</body>
+</html>

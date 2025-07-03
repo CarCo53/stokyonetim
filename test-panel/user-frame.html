@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Kullanıcı İşlemleri</title>
+  <style>
+    body { font-family: monospace; margin: 18px; }
+    .result { background: #fff; border: 1px solid #bbb; padding: 8px; margin-top: 8px; }
+    label { display: inline-block; width: 100px; }
+    .hidden { display: none; }
+    table { border-collapse: collapse; margin: 10px 0; }
+    th, td { border: 1px solid #ccc; padding: 5px 10px; }
+  </style>
+</head>
+<body>
+  <h3>Kullanıcı İşlemleri</h3>
+  <form id="userForm" autocomplete="off">
+    <input type="hidden" id="userId">
+    <div>
+      <label>Firma:</label>
+      <select id="firmId" required></select>
+    </div>
+    <div>
+      <label>Mağaza:</label>
+      <select id="storeId" required></select>
+    </div>
+    <div>
+      <label>Kullanıcı Adı:</label>
+      <input type="text" id="username" required>
+    </div>
+    <div>
+      <label>Şifre:</label>
+      <input type="password" id="password">
+    </div>
+    <div>
+      <label>Rol:</label>
+      <select id="role" required>
+        <option value="">Rol Seçin</option>
+        <option value="admin">admin</option>
+        <option value="patron">patron</option>
+        <option value="calisan">çalışan</option>
+      </select>
+    </div>
+    <div>
+      <button type="submit" id="saveBtn">Ekle</button>
+      <button type="button" id="cancelBtn" style="display:none">İptal</button>
+    </div>
+  </form>
+  <button type="button" id="refreshBtn">Yenile</button>
+  <div id="userResult" class="result"></div>
+
+  <table id="usersTable" style="display:none;">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Firma</th>
+        <th>Mağaza</th>
+        <th>Kullanıcı Adı</th>
+        <th>Rol</th>
+        <th>Düzenle</th>
+        <th>Sil</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script src="local-storage.js"></script>
+  <script src="user-frame.js"></script>
+</body>
+</html>

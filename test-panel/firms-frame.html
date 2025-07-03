@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Firma Frame</title>
+  <style>
+    body { font-family: monospace; margin: 18px; }
+    .result { background: #fff; border: 1px solid #bbb; padding: 8px; margin-top: 8px; }
+    label { display: inline-block; width: 100px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 6px;}
+    th, td { border: 1px solid #ccc; padding: 3px 6px; }
+    th { background: #eee; }
+    button { cursor: pointer; }
+    .hidden { display: none; }
+  </style>
+  <script src="local-storage.js"></script>
+  <script src="firms-frame.js"></script>
+</head>
+<body>
+  <h3>Firma İşlemleri</h3>
+  <form id="firmForm">
+    <input type="hidden" name="id" id="firmId">
+    <label>Adı:</label><input required name="name" id="firmName"><br>
+    <button type="submit" id="firmSaveBtn">Ekle</button>
+    <button type="button" id="firmCancelBtn" class="hidden">İptal</button>
+  </form>
+  <button type="button" id="firmsListBtn">Listele</button>
+  <div id="firmsResult" class="result"></div>
+</body>
+</html>
